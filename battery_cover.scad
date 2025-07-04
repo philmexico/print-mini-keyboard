@@ -1,8 +1,10 @@
+$fn = 50;
+
 width = 67;
 length = 61;
 height = 10.7;
 radius_front = 17;
-length_front = 15;
+front_length = 15;
 top_indent = 3; // for later; how much of the tip of the mouth goes in
 thickness = 1.8;
 tooth_width = 7.2;
@@ -14,11 +16,18 @@ tooth_hook_radius = 1;
 
 printer_tolerance = .2;
 
+rounding_radius_small = 1;
+
 module bottom_plate() {
     difference(){
         cube([width, length, thickness]);
+        cube([rounding_radius_small, rounding_radius_small, thickness]);
+        translate([width - rounding_radius_small, 0, 0])cube([rounding_radius_small, rounding_radius_small, thickness]);
+        // save filament for test
         translate([tooth_width, tooth_width, 0])cube([width - 2 * tooth_width, length - 2 * tooth_width, thickness]);
     }
+    translate([rounding_radius_small, rounding_radius_small, 0])cylinder(h = thickness, r = rounding_radius_small);
+    translate([width - rounding_radius_small, rounding_radius_small, 0])cylinder(h = thickness, r = rounding_radius_small);
 }
 
 module front() {
@@ -30,16 +39,20 @@ module front() {
         translate([0, length, radius_front])rotate([0, 90, 0])cylinder(h = width, r = radius_front - thickness);
 
         // cut off top - front
-        translate([0, length, height])cube([width, length + length_front, width * 2]);
+        translate([0, length, height])cube([width, length + front_length, width * 2]);
 
         // cut off top - back
         translate([0, -length, thickness])cube([width, length * 2, length * 2]);
+
+
+        // save filament for test
+        translate([tooth_width, length, 0])cube([width - 2 * tooth_width, front_length - .5 * tooth_width, height]);
     }
 }
 
 module teeth() {
-    translate([tooth_distance, -tooth_length, thickness])cube([tooth_width, tooth_length, tooth_thickness]);
-    translate([tooth_distance, -tooth_length + tooth_hook_radius, thickness])rotate([0, 90, 0])cylinder(h = tooth_width, r = tooth_hook_radius);
+    translate([tooth_distance, -tooth_length, thickness + tooth_thickness / 2])rotate([-5, 0, 0])cube([tooth_width, tooth_length, tooth_thickness]);
+    translate([tooth_distance, -tooth_length + tooth_hook_radius, thickness + tooth_thickness / 2])rotate([0, 90, 0])cylinder(h = tooth_width, r = tooth_hook_radius);
     translate([tooth_distance, -.25, thickness + .03])rotate([-15, 0, 0])cube([tooth_width, tooth_length, tooth_thickness]);
 
     translate([width - tooth_width - tooth_distance, -tooth_length, thickness])cube([tooth_width, tooth_length, tooth_thickness]);
@@ -51,20 +64,28 @@ module teeth() {
     translate([width - tooth_width - tooth_distance - printer_tolerance, length + radius_front - tooth_length, height - tooth_thickness])cube([tooth_width, tooth_length / 2, tooth_thickness]);
 }
 
-module nothing() {
-    rotate([0, 90, 0])translate([0, length, 0])cylinder(h = width, r = width);
-    
-    difference() {
-        cube([width, length, height]);
-        translate([5, 5, 1])cube([width - 10, length - 10, height]);
-    }
-}
-
 bottom_plate();
-front();
+difference(){
+    front();
+    rounded_front();
+}
 teeth();
 
-//    translate([5, 5, 1])cube([width - 10, length - 10, heigth]);
+module rounded_front() {
+    difference(){
+        translate([radius_front / 2, length + front_length + thickness / 2, height - radius_front])rotate([90, 0, 0])cylinder(h = thickness * 2, r = radius_front + 2 * thickness);
+        translate([radius_front / 2.5, length + front_length + thickness / 2, height - radius_front])rotate([90, 0, 0])cylinder(h = thickness * 2, r = radius_front);
+        translate([radius_front / 3, length + front_length / 2, 0])cube([radius_front * 2, radius_front, radius_front]);
+    }
+    difference(){
+        translate([width - radius_front / 2, length + front_length + thickness / 2, height - radius_front])rotate([90, 0, 0])cylinder(h = thickness * 2, r = radius_front + 2 * thickness);
+        translate([width - radius_front / 2.5, length + front_length + thickness / 2, height - radius_front])rotate([90, 0, 0])cylinder(h = thickness * 2, r = radius_front);
+        translate([width - 2.3 * radius_front, length + front_length / 2, 0])cube([radius_front * 2, radius_front, radius_front]);
+    }
+}
+// rounded_front();
+
+//    translate([5, 5, 1])cube([width - 10, length - 10, height]);
 
 // just for reference
 /*
