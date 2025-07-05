@@ -1,18 +1,23 @@
 $fn = 50;
 
-width = 67;
-length = 61;
-height = 10.7;
+width = 66.5;
+length = 43.5;
+height = 12;
+
 radius_front = 17;
 front_length = 15;
+
+rounded_corner_radius = 4;
+
 top_indent = 3; // for later; how much of the tip of the mouth goes in
-thickness = 1.8;
+
+thickness = 1.9;
 tooth_width = 7.2;
 tooth_height = .65;
 tooth_length = 5.5;
 tooth_distance = 6.5;
 tooth_thickness = 1;
-tooth_hook_radius = 1;
+tooth_hook_radius = .8;
 
 printer_tolerance = .2;
 
@@ -67,15 +72,44 @@ module teeth() {
 bottom_plate();
 difference(){
     front();
-    rounded_front();
+//    rounded_front();
+    translate([2 * rounded_corner_radius, length + front_length, height - rounded_corner_radius - 0 * thickness])scale([2, 1])rotate([60, 0, 0])cutting_tube();
+    translate([width - 2 *rounded_corner_radius, length + front_length, height - rounded_corner_radius - 0 * thickness])scale([-2, 1])rotate([60, 0, 0])cutting_tube();
 }
 teeth();
 
-module rounded_front() {
+
+module cutting_tube() {
     difference(){
-        translate([radius_front / 2, length + front_length + thickness / 2, height - radius_front])rotate([90, 0, 0])cylinder(h = thickness * 2, r = radius_front + 2 * thickness);
-        translate([radius_front / 2.5, length + front_length + thickness / 2, height - radius_front])rotate([90, 0, 0])cylinder(h = thickness * 2, r = radius_front);
-        translate([radius_front / 3, length + front_length / 2, 0])cube([radius_front * 2, radius_front, radius_front]);
+        cylinder(h = thickness * 2, r = rounded_corner_radius + thickness);
+        cylinder(h = thickness * 2, r = rounded_corner_radius);
+        translate([0, -rounded_corner_radius - thickness, 0])cube([rounded_corner_radius + thickness, (rounded_corner_radius + thickness) * 2, thickness * 2]);
+        translate([-rounded_corner_radius - thickness, -3 * (rounded_corner_radius - thickness), 0])cube([rounded_corner_radius + thickness, rounded_corner_radius + thickness, thickness * 2]);
+    }
+}
+
+module cutting_tube_backup() {
+    rounded_corner_x_in = -2 * thickness;
+    rounded_corner_y_in = length + front_length;
+    rounded_corner_z_up = height - 2 * rounded_corner_radius + thickness;
+    difference(){
+        translate([2 * rounded_corner_radius - thickness, rounded_corner_y_in, rounded_corner_z_up])rotate([60, 0, 0])cylinder(h = thickness * 2, r = rounded_corner_radius + 2 * thickness);
+        translate([2 * rounded_corner_radius - thickness, rounded_corner_y_in, rounded_corner_z_up])rotate([60, 0, 0])cylinder(h = thickness * 2, r = rounded_corner_radius + thickness);
+//        translate([rounded_corner_radius + thickness, rounded_corner_y_in, rounded_corner_z_up])rotate([60, 0, 0])cylinder(h = thickness * 2, r = rounded_corner_radius);
+        translate([radius_front / 1.5 + rounded_corner_x_in, length + front_length / 2, 0])cube([radius_front * 2, radius_front, radius_front * 2]);
+    }
+}
+
+module rounded_front_() {
+    rounded_corner_radius = 4;
+    rounded_corner_x_in = -2 * thickness;
+    rounded_corner_y_in = length + front_length;
+    rounded_corner_z_up = height - 2 * rounded_corner_radius + thickness;
+    difference(){
+        translate([2 * rounded_corner_radius - thickness, rounded_corner_y_in, rounded_corner_z_up])rotate([60, 0, 0])cylinder(h = thickness * 2, r = rounded_corner_radius + 2 * thickness);
+        translate([2 * rounded_corner_radius - thickness, rounded_corner_y_in, rounded_corner_z_up])rotate([60, 0, 0])cylinder(h = thickness * 2, r = rounded_corner_radius + thickness);
+//        translate([rounded_corner_radius + thickness, rounded_corner_y_in, rounded_corner_z_up])rotate([60, 0, 0])cylinder(h = thickness * 2, r = rounded_corner_radius);
+        translate([radius_front / 1.5 + rounded_corner_x_in, length + front_length / 2, 0])cube([radius_front * 2, radius_front, radius_front * 2]);
     }
     difference(){
         translate([width - radius_front / 2, length + front_length + thickness / 2, height - radius_front])rotate([90, 0, 0])cylinder(h = thickness * 2, r = radius_front + 2 * thickness);
@@ -88,7 +122,8 @@ module rounded_front() {
 //    translate([5, 5, 1])cube([width - 10, length - 10, height]);
 
 // just for reference
-/*
-color(c = "red")translate([0, length + length_front, 0])cube([width, 20, height]);
-color(c = "red")translate([width, length, 0])cube([10, 15, height]);
+//*
+//color(c = "red")translate([0, length + length_front, 0])cube([width, 20, height]);
+//color(c = "red")translate([width, length, 0])cube([10, 15, height]);
+//color(c = "red")translate([width, 61, 0])cube([10, 15, height]);
 //*/
