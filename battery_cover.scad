@@ -2,7 +2,7 @@ $fn = 50;
 
 width = 66.5;
 length = 43.5;
-height = 12;
+height = 10;
 
 radius_front = 17;
 front_length = 15;
@@ -60,8 +60,8 @@ module teeth() {
     translate([tooth_distance, -tooth_length + tooth_hook_radius, thickness + tooth_thickness / 2])rotate([0, 90, 0])cylinder(h = tooth_width, r = tooth_hook_radius);
     translate([tooth_distance, -.25, thickness + .03])rotate([-15, 0, 0])cube([tooth_width, tooth_length, tooth_thickness]);
 
-    translate([width - tooth_width - tooth_distance, -tooth_length, thickness])cube([tooth_width, tooth_length, tooth_thickness]);
-    translate([width - tooth_width - tooth_distance, -tooth_length + tooth_hook_radius, thickness])rotate([0, 90, 0])cylinder(h = tooth_width, r = tooth_hook_radius);
+    translate([width - tooth_width - tooth_distance, -tooth_length, thickness + tooth_thickness / 2])rotate([-5, 0, 0])cube([tooth_width, tooth_length, tooth_thickness]);
+    translate([width - tooth_width - tooth_distance, -tooth_length + tooth_hook_radius, thickness + tooth_thickness / 2])rotate([0, 90, 0])cylinder(h = tooth_width, r = tooth_hook_radius);
     translate([width - tooth_width - tooth_distance, -.25, thickness + .03])rotate([-15, 0, 0])cube([tooth_width, tooth_length, tooth_thickness]);
 
     translate([tooth_distance + printer_tolerance, length + radius_front - tooth_length, height - tooth_thickness])cube([tooth_width, tooth_length / 2, tooth_thickness]);
@@ -73,8 +73,8 @@ bottom_plate();
 difference(){
     front();
 //    rounded_front();
-    translate([2 * rounded_corner_radius, length + front_length, height - rounded_corner_radius - 0 * thickness])scale([2, 1])rotate([60, 0, 0])cutting_tube();
-    translate([width - 2 *rounded_corner_radius, length + front_length, height - rounded_corner_radius - 0 * thickness])scale([-2, 1])rotate([60, 0, 0])cutting_tube();
+    translate([1.5 * rounded_corner_radius, length + front_length, height - rounded_corner_radius - 0 * thickness])scale([1.5, 1])rotate([60, 0, 0])cutting_tube();
+    translate([width - 1.5 * rounded_corner_radius, length + front_length, height - rounded_corner_radius - 0 * thickness])scale([-1.5, 1])rotate([60, 0, 0])cutting_tube();
 }
 teeth();
 
