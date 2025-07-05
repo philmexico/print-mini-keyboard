@@ -17,7 +17,7 @@ tooth_height = .65;
 tooth_length = 5.5;
 tooth_distance = 6.5;
 tooth_thickness = 1;
-tooth_hook_radius = .8;
+tooth_hook_radius = .6;
 
 printer_tolerance = .2;
 
