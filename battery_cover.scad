@@ -1,7 +1,7 @@
 $fn = 50;
 
 width = 66.5;
-length = 43.5;
+length = 44.5;
 height = 11;
 
 radius_front = 17;
@@ -11,7 +11,8 @@ rounded_corner_radius = 6;
 
 top_indent = 3; // for later; how much of the tip of the mouth goes in
 
-thickness = 1.9;
+thickness = 1.9; // 2.2? 2.5?
+
 tooth_width = 7.2;
 tooth_height = .65;
 tooth_length = 5.5;
@@ -64,16 +65,11 @@ module teeth() {
     translate([width - tooth_width - tooth_distance, -tooth_length + tooth_hook_radius, thickness + tooth_thickness / 2])rotate([0, 90, 0])cylinder(h = tooth_width, r = tooth_hook_radius);
     translate([width - tooth_width - tooth_distance, -.25, thickness + .03])rotate([-15, 0, 0])cube([tooth_width, tooth_length, tooth_thickness]);
 
-    translate([tooth_distance + printer_tolerance, length + radius_front - tooth_length, height - tooth_thickness])cube([tooth_width, tooth_length / 2, tooth_thickness]);
+    translate([tooth_distance + printer_tolerance, length + radius_front - thickness - tooth_length, height - tooth_thickness])cube([tooth_width, tooth_length, tooth_thickness]);
 //    translate([tooth_distance, -tooth_length + tooth_hook_radius, thickness])rotate([0, 90, 0])cylinder(h = tooth_width, r = tooth_hook_radius);
-    translate([width - tooth_width - tooth_distance - printer_tolerance, length + radius_front - tooth_length, height - tooth_thickness])cube([tooth_width, tooth_length / 2, tooth_thickness]);
+    translate([width - tooth_width - tooth_distance - printer_tolerance, length + radius_front - thickness - tooth_length, height - tooth_thickness])cube([tooth_width, tooth_length, tooth_thickness]);
 }
 
-    difference(){
-  //      cylinder(h = thickness * 2, r = rounded_corner_radius + thickness * 2);
-//        cylinder(h = thickness * 2, r = rounded_corner_radius);
-    }
-//        translate([0, 0, 0])cube([rounded_corner_radius, rounded_corner_radius + thickness * 2, thickness * 2]);
 module cutting_tube() {
     difference(){
         cylinder(h = thickness * 2, r = rounded_corner_radius + thickness * 2);
